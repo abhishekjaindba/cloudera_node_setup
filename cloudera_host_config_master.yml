@@ -1,0 +1,60 @@
+---
+- hosts: hadoop
+  tasks:
+  - name: Ansible copy file to remote server
+    copy:
+      src: /home/abhishekjain/hosts
+      dest: /etc/hosts
+  - name: download and copy the repo file to /etc/yum.repo.d
+    get_url:
+      url: https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo
+      dest: /etc/yum.repos.d
+
+- hosts: c_manager
+  tasks:
+  - name: install jdk on c_manager_node
+    yum:
+      name:
+        - oracle-j2sdk1.7
+      state: present
+
+- hosts: c_manager 
+  tasks: 
+  - name: Install the Cloudera Manager Server Packages
+    yum:
+      name:
+       - cloudera-manager-daemons
+       - cloudera-manager-server
+      state: present
+
+- hosts: hadoop
+  tasks:
+  - name: install the Cloudera Manager agent
+    yum:
+      name:
+      - cloudera-manager-daemons
+      - cloudera-manager-agent
+      state: present
+
+- hosts: hadoop
+  tasks:
+  - name: start the cloudera agent on hadoop nodes
+    systemd: state=started name=cloudera-scm-agent
+
+- hosts: db_node
+  tasks:
+  - name: Installing MariaDB Server
+    yum:
+      name: 
+      - mariadb-server
+      state: present
+
+- hosts: hadoop
+  tasks:
+  - name: Backup orignal file for future refe
+    command: mv /etc/my.cnf /etc/my.cnf_org
+  - name: Change MariaDB server /etc/my.conf file
+    copy:
+      src: /home/abhishekjain/my.conf
+      dest: /etc/my.cnf
+  

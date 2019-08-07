@@ -1,0 +1,6 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+####host and IPS for Hadoop
+192.168.1.101 cloudera01.p27.com cloudera01
+192.168.1.102 cloudera02.p27.com cloudera02
+192.168.1.103 cloudera03.p27.com cloudera03
